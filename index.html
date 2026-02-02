@@ -742,13 +742,13 @@
         }
 
         function initSwipeGestures() {
-            const selector = document.getElementById('weekSelector');
+            const header = document.querySelector('.header');
             
-            selector.addEventListener('touchstart', (e) => {
+            header.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
             }, { passive: true });
             
-            selector.addEventListener('touchend', (e) => {
+            header.addEventListener('touchend', (e) => {
                 touchEndX = e.changedTouches[0].screenX;
                 handleSwipe();
             }, { passive: true });
@@ -824,6 +824,7 @@
         function selectWeek(weekNum) {
             currentWeek = weekNum;
             renderWeekIndicator();
+            renderDaySelector();
             renderContent();
         }
 
