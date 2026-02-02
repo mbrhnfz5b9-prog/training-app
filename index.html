@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,11 +18,21 @@
             --color-accent-hover: #a01830;
             --color-success: #008000;
             --color-warning: #f59e0b;
+            --space-xs: 0.25rem;
             --space-sm: 0.5rem;
             --space-md: 1rem;
             --space-lg: 1.5rem;
             --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --radius-sm: 6px;
             --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
         }
 
         @media (prefers-color-scheme: light) {
@@ -45,11 +55,14 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
             background: var(--color-bg-primary);
             color: var(--color-text-primary);
             line-height: 1.6;
             padding-bottom: 80px;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .header {
@@ -125,14 +138,15 @@
             background: var(--color-bg-elevated);
             color: var(--color-text-primary);
             border: 2px solid #e5e7eb;
-            border-radius: 12px;
+            border-radius: var(--radius-lg);
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.95rem;
+            transition: all var(--transition-base);
             text-align: center;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-sm);
             position: relative;
         }
 
@@ -140,15 +154,20 @@
             border-color: var(--color-accent);
             border-width: 3px;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .day-btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
         }
 
         .day-btn.active {
-            background: var(--color-bg-elevated);
+            background: linear-gradient(135deg, rgba(196, 30, 58, 0.05) 0%, rgba(196, 30, 58, 0.02) 100%);
             color: var(--color-text-primary);
             border-color: var(--color-accent);
             border-width: 3px;
-            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
         }
 
         .day-btn.completed::after {
@@ -169,19 +188,27 @@
 
         .workout-section {
             background: #ffffff;
-            border-radius: var(--radius);
-            padding: var(--space-lg);
-            margin-bottom: var(--space-lg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
             border-left: 4px solid var(--color-accent);
+            box-shadow: var(--shadow-md);
+            transition: box-shadow var(--transition-base);
+        }
+
+        .workout-section:hover {
+            box-shadow: var(--shadow-lg);
         }
 
         .workout-section h2 {
             color: var(--color-accent);
-            font-size: 1.25rem;
-            margin-bottom: var(--space-md);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
             display: flex;
             align-items: center;
             gap: var(--space-sm);
+            letter-spacing: -0.02em;
         }
 
         .workout-section h3 {
@@ -192,43 +219,69 @@
         }
 
         .exercise-item {
-            background: #ffffff;
-            padding: var(--space-md);
-            border-radius: var(--radius);
-            margin-bottom: var(--space-md);
+            background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-lg);
+            border: 1px solid #f0f0f0;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+
+        .exercise-item:hover {
+            border-color: rgba(196, 30, 58, 0.2);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
         }
 
         .exercise-header {
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.05rem;
             color: var(--color-text-primary);
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .exercise-header::before {
+            content: '●';
+            color: var(--color-accent);
+            font-size: 0.6rem;
         }
 
         .exercise-details {
             color: var(--color-text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.8;
+            font-size: 0.95rem;
+            line-height: 1.9;
+            padding-left: var(--space-md);
         }
 
         .main-lift-table {
             width: 100%;
             background: var(--color-bg-elevated);
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            margin: var(--space-md) 0;
+            margin: var(--space-lg) 0;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e5e7eb;
         }
 
         .main-lift-table th,
         .main-lift-table td {
-            padding: var(--space-md);
+            padding: var(--space-lg);
             text-align: left;
-            border-bottom: 1px solid var(--color-bg-secondary);
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
         }
 
         .main-lift-table th {
-            background: var(--color-accent);
-            color: var(--color-text-primary);
-            font-weight: 600;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #a01830 100%);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
         }
 
         .main-lift-table tr:last-child td {
@@ -236,19 +289,31 @@
         }
 
         .highlight {
-            background: var(--color-accent);
-            color: var(--color-text-primary);
-            font-weight: 600;
+            background: linear-gradient(135deg, rgba(196, 30, 58, 0.95) 0%, rgba(160, 24, 48, 0.95) 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .highlight td {
+            padding: var(--space-xl);
         }
 
         .tempo-note {
-            background: #ffffff;
-            padding: var(--space-md);
-            border-radius: var(--radius);
-            margin: var(--space-md) 0;
-            border-left: 3px solid var(--color-warning);
+            background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin: var(--space-lg) 0;
+            border-left: 4px solid var(--color-warning);
             font-size: 0.9rem;
+            line-height: 1.8;
             color: var(--color-text-secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tempo-note strong {
+            color: var(--color-text-primary);
+            font-weight: 700;
         }
 
         .bullet-list {
@@ -292,31 +357,44 @@
         .complete-workout-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
             background: transparent;
-            color: #008000;
-            border: 2px solid #008000;
-            border-radius: var(--radius);
-            font-size: 0.9rem;
-            font-weight: 600;
+            color: var(--color-success);
+            border: 2px solid var(--color-success);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
-            margin-top: var(--space-lg);
-            transition: all 0.3s;
+            margin-top: var(--space-xl);
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+            min-width: 200px;
         }
 
         .complete-workout-btn:hover {
-            background: rgba(0, 128, 0, 0.1);
+            background: rgba(0, 128, 0, 0.08);
+            border-width: 3px;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .complete-workout-btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
         }
 
         .complete-workout-btn.completed {
-            background: #008000;
+            background: var(--color-success);
             color: white;
             cursor: default;
+            box-shadow: 0 4px 12px rgba(0, 128, 0, 0.3);
         }
 
         .complete-workout-btn.completed:hover {
-            background: #008000;
+            background: var(--color-success);
+            transform: none;
         }
 
         .upload-section {
@@ -383,9 +461,21 @@
             border: 1px solid #e5e7eb;
         }
 
+        /* Mobile-first responsive enhancements */
         @media (max-width: 640px) {
+            :root {
+                --space-lg: 1rem;
+                --space-xl: 1.25rem;
+                --space-2xl: 1.5rem;
+            }
+
             .header h1 {
                 font-size: 1.25rem;
+            }
+
+            .week-indicator {
+                font-size: 1.35rem;
+                padding: 0.5rem 1rem;
             }
 
             .content {
@@ -393,12 +483,29 @@
             }
 
             .workout-section {
-                padding: var(--space-md);
+                padding: var(--space-lg);
+                margin-bottom: var(--space-lg);
+            }
+
+            .workout-section h2 {
+                font-size: 1.15rem;
             }
 
             .day-btn {
-                min-width: 60px;
-                padding: var(--space-sm);
+                min-width: 70px;
+                padding: var(--space-md);
+                font-size: 0.85rem;
+            }
+
+            .exercise-item {
+                padding: var(--space-md);
+            }
+
+            .exercise-header {
+                font-size: 0.95rem;
+            }
+
+            .exercise-details {
                 font-size: 0.9rem;
             }
 
@@ -410,6 +517,39 @@
 
             .main-lift-table table {
                 min-width: 500px;
+            }
+
+            .main-lift-table th,
+            .main-lift-table td {
+                padding: var(--space-md);
+                font-size: 0.85rem;
+            }
+
+            .complete-workout-btn {
+                width: 100%;
+                padding: var(--space-lg);
+            }
+        }
+
+        /* Tablet optimization */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .content {
+                max-width: 700px;
+            }
+
+            .day-btn {
+                min-width: 90px;
+            }
+        }
+
+        /* Large screen optimization */
+        @media (min-width: 1025px) {
+            .content {
+                max-width: 900px;
+            }
+
+            .workout-section {
+                padding: var(--space-2xl);
             }
         }
     </style>
@@ -989,5 +1129,3 @@
     </script>
 </body>
 </html>
-
-
