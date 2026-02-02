@@ -461,6 +461,14 @@
             border: 1px solid #e5e7eb;
         }
 
+        /* Logo responsive styles */
+        @media (max-width: 640px) {
+            .header svg {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
         /* Mobile-first responsive enhancements */
         @media (max-width: 640px) {
             :root {
@@ -557,6 +565,31 @@
 <body>
     <div class="header">
         <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/dba2d231-262b-41a9-8ea6-8e1246f7acc5" alt="Training Hero" class="hero-image">
+        
+        <!-- Custom SVG Logo -->
+        <div style="position: absolute; top: 1rem; left: 1rem; z-index: 10;">
+            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Circular background -->
+                <circle cx="50" cy="50" r="48" fill="#C41E3A" stroke="white" stroke-width="3"/>
+                
+                <!-- Barbell -->
+                <rect x="25" y="47" width="50" height="6" fill="white" rx="1"/>
+                <rect x="22" y="42" width="6" height="16" fill="white" rx="2"/>
+                <rect x="72" y="42" width="6" height="16" fill="white" rx="2"/>
+                
+                <!-- Running shoe/wing element -->
+                <path d="M 35 65 Q 40 62 45 65 Q 50 68 55 65 Q 60 62 65 65" 
+                      stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M 38 70 Q 43 67 48 70 Q 53 73 58 70" 
+                      stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+                
+                <!-- Dynamic accent line -->
+                <path d="M 30 35 L 70 35" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="30" cy="35" r="3" fill="white"/>
+                <circle cx="70" cy="35" r="3" fill="white"/>
+            </svg>
+        </div>
+        
         <button class="upload-toggle" onclick="toggleUploadModal()">⚙️</button>
         <div class="week-selector" id="weekSelector">
             <div class="week-indicator" id="weekIndicator">Volume accumulation</div>
