@@ -1,4 +1,475 @@
-. Split Stance DB RDL; 4111; 6/leg; rest 60sec' }
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>6-Week Concurrent Training Program</title>
+    <style>
+        :root {
+            --color-bg-primary: #ffffff;
+            --color-bg-secondary: #f8f9fa;
+            --color-bg-elevated: #ffffff;
+            --color-text-primary: #1a1a1a;
+            --color-text-secondary: #4a4a4a;
+            --color-text-muted: #6b7280;
+            --color-accent: #C41E3A;
+            --color-accent-hover: #a01830;
+            --color-success: #008000;
+            --color-warning: #f59e0b;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --radius: 8px;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --color-bg-primary: #ffffff;
+                --color-bg-secondary: #f1f5f9;
+                --color-bg-elevated: #ffffff;
+                --color-text-primary: #0f172a;
+                --color-text-secondary: #475569;
+                --color-text-muted: #64748b;
+                --color-accent: #C41E3A;
+                --color-accent-hover: #a01830;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .upload-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(196, 30, 58, 0.3);
+            color: var(--color-accent);
+            border: 1px solid rgba(196, 30, 58, 0.5);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .upload-toggle:hover {
+            background: rgba(196, 30, 58, 0.5);
+        }
+
+        .week-selector {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        .week-indicator {
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #C41E3A;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+        }
+
+        .swipe-hint {
+            display: none;
+        }
+
+        .day-selector {
+            display: flex;
+            gap: var(--space-sm);
+            overflow-x: auto;
+            padding: var(--space-md);
+            background: var(--color-bg-secondary);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .day-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: var(--space-lg);
+            background: var(--color-bg-elevated);
+            color: var(--color-text-primary);
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .day-btn:hover {
+            border-color: var(--color-accent);
+            border-width: 3px;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .day-btn.active {
+            background: var(--color-bg-elevated);
+            color: var(--color-text-primary);
+            border-color: var(--color-accent);
+            border-width: 3px;
+            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+        }
+
+        .day-btn.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: var(--color-success);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: var(--space-lg);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .workout-section {
+            background: #ffffff;
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .workout-section h2 {
+            color: var(--color-accent);
+            font-size: 1.25rem;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .workout-section h3 {
+            color: var(--color-text-primary);
+            font-size: 1.1rem;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+        }
+
+        .exercise-item {
+            background: #ffffff;
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            margin-bottom: var(--space-md);
+        }
+
+        .exercise-header {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .exercise-details {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .main-lift-table {
+            width: 100%;
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: var(--space-md) 0;
+        }
+
+        .main-lift-table th,
+        .main-lift-table td {
+            padding: var(--space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--color-bg-secondary);
+        }
+
+        .main-lift-table th {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        .main-lift-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        .tempo-note {
+            background: #ffffff;
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-warning);
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .bullet-list {
+            margin-left: var(--space-lg);
+            color: var(--color-text-secondary);
+        }
+
+        .bullet-list li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--color-accent);
+            color: var(--color-bg-primary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: var(--space-sm);
+        }
+
+        .rest-day {
+            text-align: center;
+            padding: var(--space-xl);
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius);
+            border: 2px dashed var(--color-accent);
+        }
+
+        .rest-day h2 {
+            color: var(--color-accent);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .complete-workout-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: #008000;
+            border: 2px solid #008000;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: var(--space-lg);
+            transition: all 0.3s;
+        }
+
+        .complete-workout-btn:hover {
+            background: rgba(0, 128, 0, 0.1);
+        }
+
+        .complete-workout-btn.completed {
+            background: #008000;
+            color: white;
+            cursor: default;
+        }
+
+        .complete-workout-btn.completed:hover {
+            background: #008000;
+        }
+
+        .upload-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-section.active {
+            display: flex;
+        }
+
+        .upload-modal {
+            background: var(--color-bg-primary);
+            border-radius: var(--radius);
+            padding: var(--space-xl);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-text-muted);
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: var(--space-md) var(--space-xl);
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: var(--space-md);
+        }
+
+        .upload-btn:hover {
+            background: var(--color-accent-hover);
+        }
+
+        .main-lift-table {
+            width: 100%;
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: var(--space-md) 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 {
+                font-size: 1.25rem;
+            }
+
+            .content {
+                padding: var(--space-md);
+            }
+
+            .workout-section {
+                padding: var(--space-md);
+            }
+
+            .day-btn {
+                min-width: 60px;
+                padding: var(--space-sm);
+                font-size: 0.9rem;
+            }
+
+            .main-lift-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .main-lift-table table {
+                min-width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/dba2d231-262b-41a9-8ea6-8e1246f7acc5" alt="Training Hero" class="hero-image">
+        <button class="upload-toggle" onclick="toggleUploadModal()">⚙️</button>
+        <div class="week-selector" id="weekSelector">
+            <div class="week-indicator" id="weekIndicator">Volume accumulation</div>
+        </div>
+    </div>
+
+    <div class="upload-section" id="uploadModal">
+        <div class="upload-modal">
+            <button class="upload-close" onclick="toggleUploadModal()">×</button>
+            <p style="margin-bottom: 0.5rem; color: var(--color-text-secondary);">Load New Program</p>
+            <input type="file" id="programUpload" accept=".json" style="display: none;">
+            <button class="upload-btn" onclick="document.getElementById('programUpload').click()">📁 Upload JSON Program</button>
+        </div>
+    </div>
+
+    <div class="day-selector" id="daySelector"></div>
+
+    <div class="content" id="content"></div>
+
+    <script>
+        console.log('Script loading...');
+        
+        const programData = {
+            weeks: [
+                { num: 1, load: '75-78%', sets: '4×6', tempo: '3010', rest: '2-3min', focus: 'Volume accumulation' },
+                { num: 2, load: '78-82%', sets: '5×5', tempo: '3010', rest: '2-3min', focus: 'Volume + intensity' },
+                { num: 3, load: '82-85%', sets: '4×4', tempo: '3110', rest: '3min', focus: 'Intensification' },
+                { num: 4, load: '85-88%', sets: '4×3', tempo: '3110', rest: '3-4min', focus: 'Heavy strength' },
+                { num: 5, load: '88-92%', sets: '5×2', tempo: '31X0', rest: '4-5min', focus: 'Max strength peak' },
+                { num: 6, load: '50-60%', sets: '3×5', tempo: '3010', rest: '2min', focus: 'Deload' }
+            ],
+            days: {
+                1: {
+                    name: 'Squat + Lower + Intervals',
+                    sections: [
+                        {
+                            title: 'Warm-Up (8-10 min)',
+                            exercises: [
+                                { name: '3 Rounds', details: 'Goblet Kang Squat × 8-10\nDB Side Plank Rotations × 8/arm\nBodyweight Split Squat × 10/leg' }
+                            ]
+                        },
+                        {
+                            title: 'A) Main Lift: Back Squat',
+                            isMainLift: true
+                        },
+                        {
+                            title: 'B) Unilateral Lower Body',
+                            byWeek: {
+                                '1-2': [
+                                    { name: '3 Sets', details: '1. Suitcase Split Squat; 20X1; 6/leg; rest 60sec\n2. Single-Leg DB Cross Body RDL; 3010; 6/leg; rest 60sec' }
+                                ],
+                                '3-4': [
+                                    { name: '3 Sets', details: '1. Goblet Loaded Box Step Down; 40X1; 6/leg; rest 60sec\n2. Split Stance DB RDL; 4111; 6/leg; rest 60sec' }
                                 ],
                                 '5-6': [
                                     { name: '3 Sets', details: '1. DB Suitcase Walking Lunge; 20X0; 12-16 steps; rest 60sec\n2. Death March; 30X0; 6-8/leg; rest 60sec' }
