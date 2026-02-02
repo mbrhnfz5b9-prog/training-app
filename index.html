@@ -1,1193 +1,975 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>6-Week Training Program</title>
-  <style>
-    :root {
-      --bg-primary: #1a1a1a;
-      --bg-secondary: #2a2a2a;
-      --bg-card: #333333;
-      --bg-hover: #404040;
-      --text-primary: #ffffff;
-      --text-secondary: #cccccc;
-      --accent-gold: #d4af37;
-      --accent-gold-dark: #b8941f;
-      --accent-gold-light: #e8c547;
-      --border: #444444;
-      --success: #4ade80;
-      --deload: #6b7280;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>6-Week Concurrent Training Program</title>
+    <style>
+        :root {
+            --color-bg-primary: #ffffff;
+            --color-bg-secondary: #f8f9fa;
+            --color-bg-elevated: #ffffff;
+            --color-text-primary: #1a1a1a;
+            --color-text-secondary: #4a4a4a;
+            --color-text-muted: #6b7280;
+            --color-accent: #A57B0A;
+            --color-accent-hover: #8a6708;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --radius: 8px;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --color-bg-primary: #ffffff;
+                --color-bg-secondary: #f1f5f9;
+                --color-bg-elevated: #e2e8f0;
+                --color-text-primary: #0f172a;
+                --color-text-secondary: #475569;
+                --color-text-muted: #64748b;
+                --color-accent: #A57B0A;
+                --color-accent-hover: #8a6708;
+            }
+        }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      padding: 1rem;
-      min-height: 100vh;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
 
-    .header {
-      text-align: center;
-      padding: 1.5rem 1rem;
-      background: linear-gradient(
-        135deg,
-        var(--accent-gold) 0%,
-        var(--accent-gold-dark) 100%
-      );
-      color: var(--bg-primary);
-      border-radius: 16px;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-    }
+        .header {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    .header h1 {
-      font-size: 1.9rem;
-      font-weight: 800;
-      margin-bottom: 0.4rem;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
 
-    .header p {
-      font-size: 1rem;
-      opacity: 0.95;
-    }
+        .upload-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(165, 123, 10, 0.3);
+            color: var(--color-accent);
+            border: 1px solid rgba(165, 123, 10, 0.5);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            z-index: 10;
+        }
 
-    .week-selector {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
-      margin: 1.5rem 0;
-    }
+        .upload-toggle:hover {
+            background: rgba(165, 123, 10, 0.5);
+        }
 
-    .week-btn {
-      padding: 0.7rem 1.2rem;
-      border-radius: 12px;
-      border: 2px solid var(--accent-gold);
-      background: var(--bg-card);
-      color: var(--text-primary);
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      min-width: 70px;
-      text-align: center;
-    }
+        .week-selector {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
 
-    .week-btn:hover {
-      background: var(--accent-gold);
-      color: var(--bg-primary);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
-    }
+        .week-indicator {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #A57B0A;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+        }
 
-    .week-btn.active {
-      background: var(--accent-gold);
-      color: var(--bg-primary);
-      box-shadow: 0 0 0 3px var(--accent-gold-light);
-      transform: scale(1.03);
-    }
+        .swipe-hint {
+            display: none;
+        }
 
-    .week-btn.deload {
-      border-color: var(--deload);
-    }
+        .day-selector {
+            display: flex;
+            gap: var(--space-sm);
+            overflow-x: auto;
+            padding: var(--space-md);
+            background: var(--color-bg-secondary);
+            -webkit-overflow-scrolling: touch;
+        }
 
-    .days-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      justify-content: center;
-    }
+        .day-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: var(--space-lg);
+            background: var(--color-bg-elevated);
+            color: var(--color-text-primary);
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
 
-    .day-btn {
-      flex: 1 0 120px;
-      max-width: 160px;
-      background: var(--bg-card);
-      border-radius: 12px;
-      border: 2px solid var(--border);
-      padding: 0.8rem 0.9rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
+        .day-btn:hover {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-    .day-btn:hover {
-      border-color: var(--accent-gold);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    }
+        .day-btn.active {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            border-color: var(--color-accent);
+            box-shadow: 0 4px 12px rgba(253,229,178,0.4);
+        }
 
-    .day-btn.active {
-      border-color: var(--accent-gold);
-      background: var(--bg-hover);
-      box-shadow: 0 0 0 3px var(--accent-gold-light);
-    }
+        .day-btn.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: var(--color-success);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
 
-    .day-btn.rest {
-      opacity: 0.6;
-      cursor: default;
-    }
+        .content {
+            padding: var(--space-lg);
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    .day-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: linear-gradient(
-        135deg,
-        var(--accent-gold),
-        var(--accent-gold-dark)
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      color: var(--bg-primary);
-    }
+        .workout-section {
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            border-left: 4px solid var(--color-accent);
+        }
 
-    .day-text {
-      display: flex;
-      flex-direction: column;
-    }
+        .workout-section h2 {
+            color: var(--color-accent);
+            font-size: 1.25rem;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
 
-    .day-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--accent-gold);
-    }
+        .workout-section h3 {
+            color: var(--color-text-primary);
+            font-size: 1.1rem;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+        }
 
-    .day-subtitle {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-    }
+        .exercise-item {
+            background: var(--color-bg-elevated);
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            margin-bottom: var(--space-md);
+        }
 
-    .progress-pill {
-      position: fixed;
-      top: 0.7rem;
-      right: 0.7rem;
-      background: var(--accent-gold);
-      color: var(--bg-primary);
-      padding: 0.35rem 0.8rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
-      z-index: 10;
-    }
+        .exercise-header {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-sm);
+        }
 
-    .card {
-      background: var(--bg-card);
-      border-radius: 16px;
-      padding: 1rem;
-      border: 1px solid var(--border);
-      margin-bottom: 1rem;
-    }
+        .exercise-details {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
 
-    .section-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--accent-gold);
-      margin-bottom: 0.6rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
+        .main-lift-table {
+            width: 100%;
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: var(--space-md) 0;
+        }
 
-    .tag {
-      display: inline-block;
-      background: rgba(212, 175, 55, 0.16);
-      color: var(--accent-gold);
-      padding: 0.2rem 0.5rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      margin-left: 0.4rem;
-    }
+        .main-lift-table th,
+        .main-lift-table td {
+            padding: var(--space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--color-bg-secondary);
+        }
 
-    .exercise-block {
-      background: var(--bg-secondary);
-      border-radius: 10px;
-      padding: 0.7rem 0.8rem;
-      margin-bottom: 0.5rem;
-      border-left: 3px solid var(--accent-gold-light);
-    }
+        .main-lift-table th {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
 
-    .exercise-name {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 0.2rem;
-    }
+        .main-lift-table tr:last-child td {
+            border-bottom: none;
+        }
 
-    .exercise-detail {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-    }
+        .highlight {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
 
-    .table-wrapper {
-      overflow-x: auto;
-      margin-top: 0.4rem;
-      border-radius: 10px;
-      background: var(--bg-secondary);
-    }
+        .tempo-note {
+            background: var(--color-bg-elevated);
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            margin: var(--space-md) 0;
+            border-left: 3px solid var(--color-warning);
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
+        .bullet-list {
+            margin-left: var(--space-lg);
+            color: var(--color-text-secondary);
+        }
 
-    th,
-    td {
-      padding: 0.55rem 0.5rem;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
+        .bullet-list li {
+            margin-bottom: var(--space-sm);
+        }
 
-    th {
-      background: var(--accent-gold-dark);
-      color: var(--bg-primary);
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--color-accent);
+            color: var(--color-bg-primary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: var(--space-sm);
+        }
 
-    tr.current-week {
-      background: rgba(212, 175, 55, 0.2);
-      border-left: 3px solid var(--accent-gold);
-    }
+        .rest-day {
+            text-align: center;
+            padding: var(--space-xl);
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius);
+            border: 2px dashed var(--color-accent);
+        }
 
-    tr.deload-row {
-      background: rgba(107, 114, 128, 0.2);
-    }
+        .rest-day h2 {
+            color: var(--color-accent);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+        }
 
-    .rest-day {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--text-secondary);
-    }
+        .hidden {
+            display: none;
+        }
 
-    .rest-day-icon {
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
-    }
+        .complete-workout-btn {
+            width: 100%;
+            padding: var(--space-lg);
+            background: var(--color-success);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: var(--space-xl);
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+        }
 
-    @media (max-width: 768px) {
-      body {
-        padding: 0.5rem;
-      }
-      .header h1 {
-        font-size: 1.5rem;
-      }
-      .day-btn {
-        flex: 1 0 45%;
-      }
-    }
-  </style>
+        .complete-workout-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16,185,129,0.4);
+        }
+
+        .complete-workout-btn.completed {
+            background: var(--color-text-muted);
+            cursor: default;
+        }
+
+        .complete-workout-btn.completed:hover {
+            transform: none;
+        }
+
+        .upload-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-section.active {
+            display: flex;
+        }
+
+        .upload-modal {
+            background: var(--color-bg-primary);
+            border-radius: var(--radius);
+            padding: var(--space-xl);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-text-muted);
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: var(--space-md) var(--space-xl);
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: var(--space-md);
+        }
+
+        .upload-btn:hover {
+            background: var(--color-accent-hover);
+        }
+
+        .main-lift-table {
+            width: 100%;
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: var(--space-md) 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 {
+                font-size: 1.25rem;
+            }
+
+            .content {
+                padding: var(--space-md);
+            }
+
+            .workout-section {
+                padding: var(--space-md);
+            }
+
+            .day-btn {
+                min-width: 60px;
+                padding: var(--space-sm);
+                font-size: 0.9rem;
+            }
+
+            .main-lift-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .main-lift-table table {
+                min-width: 500px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="progress-pill" id="progressPill">Week 1 • Day 1</div>
-
-  <div class="container">
     <div class="header">
-      <h1>🏋️ 6-Week Training Program</h1>
-      <p>Strength • Olympic Lifting • Gymnastics • Running</p>
+        <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/dba2d231-262b-41a9-8ea6-8e1246f7acc5" alt="Training Hero" class="hero-image">
+        <button class="upload-toggle" onclick="toggleUploadModal()">⚙️</button>
+        <div class="week-selector" id="weekSelector">
+            <div class="week-indicator" id="weekIndicator">Volume accumulation</div>
+        </div>
     </div>
 
-    <div class="week-selector" id="weekSelector"></div>
+    <div class="upload-section" id="uploadModal">
+        <div class="upload-modal">
+            <button class="upload-close" onclick="toggleUploadModal()">×</button>
+            <p style="margin-bottom: 0.5rem; color: var(--color-text-secondary);">Load New Program</p>
+            <input type="file" id="programUpload" accept=".json" style="display: none;">
+            <button class="upload-btn" onclick="document.getElementById('programUpload').click()">📁 Upload JSON Program</button>
+        </div>
+    </div>
 
-    <div class="days-row" id="daySelector"></div>
+    <div class="day-selector" id="daySelector"></div>
 
-    <div id="contentArea"></div>
-  </div>
+    <div class="content" id="content"></div>
 
-  <script>
-    const program = {
-      weeks: 6,
-      days: [
-        {
-          id: 1,
-          title: "Day 1 • Squat + Lower + Intervals",
-          subtitle: "Heavy lower body + fast run",
-          icon: "🦵",
-          isRest: false,
-          type: "strength",
-        },
-        {
-          id: 2,
-          title: "Day 2 • Bench + Upper",
-          subtitle: "Upper push + pull strength",
-          icon: "💪",
-          isRest: false,
-          type: "strength",
-        },
-        {
-          id: 3,
-          title: "Day 3 • Olympic + Gymnastics + Z2",
-          subtitle: "Technical lifts + skill + easy run",
-          icon: "⚡",
-          isRest: false,
-          type: "tech",
-        },
-        {
-          id: 4,
-          title: "Day 4 • Deadlift + Posterior",
-          subtitle: "Heavy hinge + posterior chain",
-          icon: "🔥",
-          isRest: false,
-          type: "strength",
-        },
-        {
-          id: 5,
-          title: "Day 5 • Long Run",
-          subtitle: "Steady state Z3–Z4",
-          icon: "🏃",
-          isRest: false,
-          type: "run",
-        },
-        {
-          id: 6,
-          title: "Day 6 • Rest / Mobility",
-          subtitle: "Full rest or light mobility",
-          icon: "😌",
-          isRest: true,
-        },
-        {
-          id: 7,
-          title: "Day 7 • Rest / Easy Walk",
-          subtitle: "Recovery day",
-          icon: "😴",
-          isRest: true,
-        },
-      ],
-    };
+    <script>
+        console.log('Script loading...');
+        
+        const programData = {
+            weeks: [
+                { num: 1, load: '75-78%', sets: '4×6', tempo: '3010', rest: '2-3min', focus: 'Volume accumulation' },
+                { num: 2, load: '78-82%', sets: '5×5', tempo: '3010', rest: '2-3min', focus: 'Volume + intensity' },
+                { num: 3, load: '82-85%', sets: '4×4', tempo: '3110', rest: '3min', focus: 'Intensification' },
+                { num: 4, load: '85-88%', sets: '4×3', tempo: '3110', rest: '3-4min', focus: 'Heavy strength' },
+                { num: 5, load: '88-92%', sets: '5×2', tempo: '31X0', rest: '4-5min', focus: 'Max strength peak' },
+                { num: 6, load: '50-60%', sets: '3×5', tempo: '3010', rest: '2min', focus: 'DELOAD' }
+            ],
+            days: {
+                1: {
+                    name: 'Squat + Lower + Intervals',
+                    sections: [
+                        {
+                            title: 'Warm-Up (8-10 min)',
+                            exercises: [
+                                { name: '3 Rounds', details: 'Goblet Kang Squat × 8-10\nDB Side Plank Rotations × 8/arm\nBodyweight Split Squat × 10/leg' }
+                            ]
+                        },
+                        {
+                            title: 'A) Main Lift: Back Squat',
+                            isMainLift: true
+                        },
+                        {
+                            title: 'B) Unilateral Lower Body',
+                            byWeek: {
+                                '1-2': [
+                                    { name: '3 Sets', details: '1. Suitcase Split Squat; 20X1; 6/leg; rest 60sec\n2. Single-Leg DB Cross Body RDL; 3010; 6/leg; rest 60sec' }
+                                ],
+                                '3-4': [
+                                    { name: '3 Sets', details: '1. Goblet Loaded Box Step Down; 40X1; 6/leg; rest 60sec\n2. Split Stance DB RDL; 4111; 6/leg; rest 60sec' }
+                                ],
+                                '5-6': [
+                                    { name: '3 Sets', details: '1. DB Suitcase Walking Lunge; 20X0; 12-16 steps; rest 60sec\n2. Death March; 30X0; 6-8/leg; rest 60sec' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'C) Posterior Chain + Core',
+                            byWeek: {
+                                '1-2-3': [
+                                    { name: '3 Sets', details: '1. DB Hip Thrust; 20X1; 12-15 reps; rest 45sec\n2. Plank March; 20 reps/arm alternating; rest 45sec' }
+                                ],
+                                '4-5-6': [
+                                    { name: '3 Sets', details: '1. Glute Bridge V Walkouts; 12-15 reps; rest 45sec\n2. RKC Plank; 45-60sec; rest 45sec' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'D) Fast Short Run (Intervals)',
+                            byWeek: {
+                                '1-2': [
+                                    { name: 'Warm-up: 10 min easy jog', details: '' },
+                                    { name: 'Main Set', details: '6 × 400m at 3-5km race pace\nWalk/jog 90sec recovery' },
+                                    { name: 'Cool-down: 5-10 min easy jog', details: '' }
+                                ],
+                                '3-4': [
+                                    { name: 'Warm-up: 10 min easy jog', details: '' },
+                                    { name: 'Main Set', details: '8 × 300m at 3km pace\nWalk/jog 75sec recovery' },
+                                    { name: 'Cool-down: 5-10 min easy jog', details: '' }
+                                ],
+                                '5': [
+                                    { name: 'Warm-up: 10 min easy jog', details: '' },
+                                    { name: 'Main Set', details: '10 × 200m at mile pace\nWalk/jog 60sec recovery' },
+                                    { name: 'Cool-down: 5-10 min easy jog', details: '' }
+                                ],
+                                '6': [
+                                    { name: 'Warm-up: 10 min easy jog', details: '' },
+                                    { name: 'Main Set (DELOAD)', details: '4 × 200m at easy/moderate\nJog 90sec recovery' },
+                                    { name: 'Cool-down: 5-10 min easy jog', details: '' }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                2: {
+                    name: 'Bench + Upper Body',
+                    sections: [
+                        {
+                            title: 'Warm-Up (8-10 min)',
+                            exercises: [
+                                { name: '3 Rounds', details: 'Yoga Push Up × 8\nProne Snow Angels × 10\nScapular Pull Ups × 10' }
+                            ]
+                        },
+                        {
+                            title: 'A) Main Lift: Bench Press',
+                            isMainLift: true
+                        },
+                        {
+                            title: 'B) Upper Push Strength Balance',
+                            byWeek: {
+                                '1-2': [
+                                    { name: '3 Sets', details: '1. Glute Bridge Alt DB Bench; 2020; 10-12; rest 60sec\n2. Single Arm DB Push Press (Ecc Focus); 6-8/arm, 4sec down; rest 60sec' }
+                                ],
+                                '3-4': [
+                                    { name: '3 Sets', details: '1. Incline DB Bench; 31X0; 8-10; rest 60sec\n2. Half Kneeling DB Arnold Press; 21X1; 6-8/arm; rest 60sec' }
+                                ],
+                                '5-6': [
+                                    { name: '3 Sets', details: '1. Single Arm DB Bench; 22X0; 5-7/arm; rest 60sec\n2. Tall Kneeling Alt DB Press; 2111; 8-10/arm; rest 60sec' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'C) Upper Pull Strength Balance',
+                            byWeek: {
+                                '1-2': [
+                                    { name: '3 Sets', details: '1. Parallette Plank DB Row; 20X1; 6-8/arm; rest 60sec\n2. Pronated Strict Pull Up; 2011; 8-10; rest 60sec' }
+                                ],
+                                '3-4': [
+                                    { name: '3 Sets', details: '1. DB Tripod Row; 30X1; 6-8/arm; rest 60sec\n2. Mixed Grip Pull Up 2.2.2.2 (wtd if possible); rest 60sec' }
+                                ],
+                                '5-6': [
+                                    { name: '3 Sets', details: '1. Chainsaw Row; 20X2; 8-10/arm; rest 60sec\n2. Wide Grip Strict Pull Up; 31X2; 4-6; rest 60sec' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'D) Arm + Shoulder Isolation',
+                            byWeek: {
+                                '1-2-3': [
+                                    { name: '3 Sets', details: '1. Top Down Alt DB Curls; 30X0; 6-8/arm; rest 45sec\n2. Narrow Grip Tricep Push Up; 3011; 8-10; rest 45sec\n3. Single Arm Trap 3 Raise; 10/arm slow; rest 60sec' }
+                                ],
+                                '4-5-6': [
+                                    { name: '3 Sets', details: '1. Hammer Curl; 40X1; 8-10; rest 45sec\n2. DB Skull Crushers; 3010; 8-10; rest 45sec\n3. Bent Over DB Reverse Fly; 20X1; 12; rest 60sec' }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                3: {
+                    name: 'Olympic Lifting + Gymnastics',
+                    sections: [
+                        {
+                            title: 'Warm-Up (5 min)',
+                            exercises: [
+                                { name: 'EMOM × 9 min (3 rounds)', details: '1st: Run 30-40sec\n2nd: Dual DB Cuban Press × 6-8, 2020\n3rd: Goblet Cossack Squat × 4/side, 2111' }
+                            ]
+                        },
+                        {
+                            title: 'A) Olympic Lifting (15-20 min)',
+                            byWeek: {
+                                '1-2': [
+                                    { name: 'EMOM × 15 min (5 sets)', details: 'Every 3 min:\n1 Power Clean + 1 Front Squat + 1 Push Jerk\n× 3 complexes @ 60-65% 1RM Clean' }
+                                ],
+                                '3-4': [
+                                    { name: 'EMOM × 18 min (6 sets)', details: 'Every 3 min:\n1 Hang Power Clean + 1 Front Squat + 1 Split Jerk\n× 3 complexes @ 65-70% 1RM Clean' }
+                                ],
+                                '5': [
+                                    { name: 'EMOM × 18 min (6 sets)', details: 'Every 3 min:\n1 Clean (from floor) + 1 Front Squat + 1 Split Jerk\n× 2 complexes @ 70-75% 1RM Clean' }
+                                ],
+                                '6': [
+                                    { name: 'EMOM × 12 min (4 sets) - DELOAD', details: 'Every 3 min:\n1 Power Clean + 1 Push Press\n× 4 complexes @ 50-60% 1RM Clean' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'B) Gymnastics Skill Work (10 min)',
+                            byWeek: {
+                                '1-2': [
+                                    { name: 'EMOM × 10 min', details: '1st: 3-5 Strict Toes-to-Bar\n2nd: 3-5 Ring Rows, 31X1\n3rd: 30sec Handstand Hold (wall)\n4th: 3-5 Bench Dips (wtd if possible)\n5th: 2-3 Strict HSPU or negatives (4sec down)' }
+                                ],
+                                '3-4': [
+                                    { name: 'EMOM × 10 min', details: '1st: 5-7 Strict Toes-to-Bar\n2nd: 3-5 Chest-to-Ring Rows, 31X1\n3rd: 3-5 Freestanding HS attempts (30sec practice)\n4th: 3-5 Ring Dips (band-assisted if needed)\n5th: 3-5 Strict HSPU (deficit if strong)' }
+                                ],
+                                '5': [
+                                    { name: 'AMRAP 10 min for QUALITY', details: '3 Strict Toes-to-Bar\n3 Strict Chest-to-Bar Pull Ups\n20sec Handstand Hold\n3 Ring Dips\n2 Strict HSPU' }
+                                ],
+                                '6': [
+                                    { name: 'EMOM × 10 min - DELOAD', details: '1st: 3 Kipping Toes-to-Bar\n2nd: 5 Ring Rows\n3rd: 30sec Hollow Hold\n4th: 5 Push Ups\n5th: 30sec Plank' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'C) Easy Run (Zone 2)',
+                            exercises: [
+                                { name: '30-45 minutes continuous', details: 'Zone 2 intensity (60-70% max HR)\nConversational pace (nose-breathing)\nPerceived exertion: 3-4 out of 10\n\nWeek 6: Reduce to 20-30 min easy' }
+                            ]
+                        }
+                    ]
+                },
+                4: {
+                    name: 'Deadlift + Posterior Chain',
+                    sections: [
+                        {
+                            title: 'Warm-Up (8-10 min)',
+                            exercises: [
+                                { name: '3 Rounds', details: 'Goblet Good Morning; 3030; 5 reps\nQuadruped Hip Extensions × 10/leg\nScapular Push Ups × 10' }
+                            ]
+                        },
+                        {
+                            title: 'A) Main Lift: Deadlift',
+                            isMainLift: true
+                        },
+                        {
+                            title: 'B) Secondary Hinge + Glute',
+                            byWeek: {
+                                '1-2': [
+                                    { name: '3 Sets', details: '1. DB Romanian Deadlift; 3131; 8-10; rest 60sec\n2. B Stance DB Hip Thrust; 3110; 8-10/leg; rest 60sec' }
+                                ],
+                                '3-4': [
+                                    { name: '3 Sets', details: '1. Single Leg DB RDL; 31X1; 6-8/leg; rest 60sec\n2. Feet Elevated DB Glute Bridge; 10X0; 20 reps; rest 60sec' }
+                                ],
+                                '5-6': [
+                                    { name: '3 Sets', details: '1. Deficit Deadlift (2" plate); 3010; 5-6; rest 60sec\n2. Glute Loop DB Hip Thrust; 20X2; 10-12; rest 60sec' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'C) Back Strength + Core',
+                            byWeek: {
+                                '1-2': [
+                                    { name: '3 Sets', details: '1. Dual DB Prone Row; 11X2; 8-10; rest 45sec\n2. Weighted Back Extension; 3010; 12-15; rest 45sec\n3. Hamstring Plank; 30sec; rest 60sec' }
+                                ],
+                                '3-4': [
+                                    { name: '3 Sets', details: '1. DB Bent Over Row; 30X1; 10-12; rest 45sec\n2. Weighted Back Extension; 3110; 10-12; rest 45sec\n3. Extended Reverse Plank Bridge; 30-45sec; rest 60sec' }
+                                ],
+                                '5-6': [
+                                    { name: '3 Sets', details: '1. DB Gorilla Rows; 20X1; 12 alt; rest 45sec\n2. Weighted Back Extension (heavier); 3010; 8-10; rest 45sec\n3. Hollow Body Hold; 30-45sec; rest 60sec' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'D) Heavy Carries',
+                            exercises: [
+                                { name: '2-3 Sets', details: '1. Farmer\'s Walk; 40m heavy; rest 60sec\n2. Single Arm DB OH Carry; 20m/arm; rest 90sec' }
+                            ]
+                        }
+                    ]
+                },
+                5: {
+                    name: 'Long Steady Run',
+                    sections: [
+                        {
+                            title: 'Warm-Up',
+                            exercises: [
+                                { name: '10 minutes', details: 'Easy jogging + dynamic stretches\n(leg swings, walking lunges)' }
+                            ]
+                        },
+                        {
+                            title: 'Main Run',
+                            byWeek: {
+                                '1-2': [
+                                    { name: '60 minutes steady run', details: 'Intensity: High Zone 3 (75-80% max HR)\n"Comfortably hard" but sustainable\nConsistent pace throughout' }
+                                ],
+                                '3-4': [
+                                    { name: '75 minutes steady run', details: 'Intensity: High Z3 to low Z4 (78-82% max HR)\nSlightly harder than Weeks 1-2\nEven pacing; resist urge to surge' }
+                                ],
+                                '5': [
+                                    { name: '80-90 minutes steady run', details: 'Intensity: Low-mid Zone 4 (80-85% max HR)\nPeak endurance session of block\nMaintain consistent effort\nLast 15 min challenging but controlled' }
+                                ],
+                                '6': [
+                                    { name: '40-45 minutes easy run - DELOAD', details: 'Zone 2 intensity (60-70% max HR)\nRecovery pace only' }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'Cool-Down',
+                            exercises: [
+                                { name: '5-10 minutes', details: 'Easy jog + static stretching\n(hip flexors, quads, hamstrings, calves)' }
+                            ]
+                        }
+                    ]
+                },
+                6: {
+                    name: 'REST DAY',
+                    isRest: true,
+                    description: 'Complete rest, light stretching/mobility, or 20-30 min easy walk'
+                },
+                7: {
+                    name: 'REST DAY',
+                    isRest: true,
+                    description: 'Optional very light activity (easy swim, yoga, foam rolling) or full rest'
+                }
+            }
+        };
 
-    let currentWeek = 1;
-    let currentDay = 1;
+        let currentWeek = 1;
+        let currentDay = 1;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let completedWorkouts = JSON.parse(localStorage.getItem('completedWorkouts') || '{}');
 
-    function init() {
-      renderWeekButtons();
-      renderDayButtons();
-      renderContent();
-      updatePill();
-    }
-
-    function renderWeekButtons() {
-      const container = document.getElementById("weekSelector");
-      container.innerHTML = "";
-      for (let w = 1; w <= program.weeks; w++) {
-        const btn = document.createElement("button");
-        btn.className = "week-btn";
-        if (w === 6) btn.classList.add("deload");
-        if (w === currentWeek) btn.classList.add("active");
-        btn.textContent = w === 6 ? "Week 6 (Deload)" : `Week ${w}`;
-        btn.addEventListener("click", () => {
-          currentWeek = w;
-          renderWeekButtons();
-          renderContent();
-          updatePill();
-        });
-        container.appendChild(btn);
-      }
-    }
-
-    function renderDayButtons() {
-      const container = document.getElementById("daySelector");
-      container.innerHTML = "";
-      program.days.forEach((day) => {
-        const btn = document.createElement("div");
-        btn.className = "day-btn";
-        if (day.isRest) btn.classList.add("rest");
-        if (day.id === currentDay) btn.classList.add("active");
-
-        btn.innerHTML = `
-          <div class="day-icon">${day.icon}</div>
-          <div class="day-text">
-            <div class="day-title">${day.title}</div>
-            <div class="day-subtitle">${day.subtitle}</div>
-          </div>
-        `;
-        if (!day.isRest) {
-          btn.addEventListener("click", () => {
-            currentDay = day.id;
-            renderDayButtons();
+        function init() {
+            renderWeekIndicator();
+            renderDaySelector();
             renderContent();
-            updatePill();
-          });
+            initSwipeGestures();
+            initProgramUpload();
+            loadCompletedWorkouts();
         }
-        container.appendChild(btn);
-      });
-    }
 
-    function updatePill() {
-      const pill = document.getElementById("progressPill");
-      pill.textContent = `Week ${currentWeek} • Day ${currentDay}`;
-    }
+        function renderWeekIndicator() {
+            const indicator = document.getElementById('weekIndicator');
+            const weekData = programData.weeks[currentWeek - 1];
+            indicator.textContent = `${weekData.focus}`;
+        }
 
-    function renderContent() {
-      const day = program.days.find((d) => d.id === currentDay);
-      const area = document.getElementById("contentArea");
-      area.innerHTML = "";
+        function toggleUploadModal() {
+            const modal = document.getElementById('uploadModal');
+            modal.classList.toggle('active');
+        }
 
-      if (day.isRest) {
-        area.innerHTML = `
-          <div class="card rest-day">
-            <div class="rest-day-icon">${day.icon}</div>
-            <div>${day.title}</div>
-            <div style="margin-top:0.3rem;">${day.subtitle}</div>
-          </div>
-        `;
-        return;
-      }
+        function initSwipeGestures() {
+            const selector = document.getElementById('weekSelector');
+            
+            selector.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            selector.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+        }
 
-      if (day.type === "strength" && day.id === 1) {
-        renderDay1(area);
-      } else if (day.type === "strength" && day.id === 2) {
-        renderDay2(area);
-      } else if (day.type === "tech") {
-        renderDay3(area);
-      } else if (day.type === "strength" && day.id === 4) {
-        renderDay4(area);
-      } else if (day.type === "run") {
-        renderDay5(area);
-      }
-    }
+        function handleSwipe() {
+            const swipeDistance = touchStartX - touchEndX;
+            const minSwipeDistance = 50;
+            
+            if (Math.abs(swipeDistance) > minSwipeDistance) {
+                if (swipeDistance > 0 && currentWeek < 6) {
+                    selectWeek(currentWeek + 1);
+                } else if (swipeDistance < 0 && currentWeek > 1) {
+                    selectWeek(currentWeek - 1);
+                }
+            }
+        }
 
-    function renderMainLiftTable(name, rows) {
-      let html = `
-        <div class="card">
-          <div class="section-title">🏋️ Main Lift: ${name}</div>
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Week</th>
-                  <th>Load</th>
-                  <th>Sets × Reps</th>
-                  <th>Tempo</th>
-                  <th>Rest</th>
-                </tr>
-              </thead>
-              <tbody>
-      `;
-      rows.forEach((r) => {
-        const isCurrent = r.week === currentWeek;
-        const isDeload = r.week === 6;
-        html += `
-          <tr class="${isCurrent ? "current-week" : ""} ${
-          isDeload ? "deload-row" : ""
-        }">
-            <td>${r.week}</td>
-            <td><strong>${r.load}</strong></td>
-            <td>${r.setsReps}</td>
-            <td>${r.tempo}</td>
-            <td>${r.rest}</td>
-          </tr>
-        `;
-      });
-      html += `
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-      return html;
-    }
+        function initProgramUpload() {
+            const uploadInput = document.getElementById('programUpload');
+            uploadInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        try {
+                            const newProgram = JSON.parse(event.target.result);
+                            if (newProgram.weeks && newProgram.days) {
+                                Object.assign(programData, newProgram);
+                                currentWeek = 1;
+                                currentDay = 1;
+                                init();
+                                alert('✅ Program loaded successfully!');
+                            } else {
+                                alert('❌ Invalid program format. Please check the JSON structure.');
+                            }
+                        } catch (error) {
+                            alert('❌ Error loading program: ' + error.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            });
+        }
 
-    function renderDay1(area) {
-      let html = "";
+        function loadCompletedWorkouts() {
+            completedWorkouts = JSON.parse(localStorage.getItem('completedWorkouts') || '{}');
+        }
 
-      html += `
-        <div class="card">
-          <div class="section-title">
-            ⏱️ Session Info <span class="tag">~55–60 min</span>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Warm-up</div>
-            <div class="exercise-detail">
-              3 Rounds: Goblet Kang Squat × 8–10 • DB Side Plank Rotations × 8/arm • Bodyweight Split Squat × 10/leg
-            </div>
-          </div>
-        </div>
-      `;
+        function isWorkoutCompleted(week, day) {
+            return completedWorkouts[`w${week}d${day}`] === true;
+        }
 
-      const squatRows = [
-        {
-          week: 1,
-          load: "75–78%",
-          setsReps: "4 × 6",
-          tempo: "3010",
-          rest: "2–3 min",
-        },
-        {
-          week: 2,
-          load: "78–82%",
-          setsReps: "5 × 5",
-          tempo: "3010",
-          rest: "2–3 min",
-        },
-        {
-          week: 3,
-          load: "82–85%",
-          setsReps: "4 × 4",
-          tempo: "3110",
-          rest: "3 min",
-        },
-        {
-          week: 4,
-          load: "85–88%",
-          setsReps: "4 × 3",
-          tempo: "3110",
-          rest: "3–4 min",
-        },
-        {
-          week: 5,
-          load: "88–92%",
-          setsReps: "5 × 2",
-          tempo: "31X0",
-          rest: "4–5 min",
-        },
-        {
-          week: 6,
-          load: "50–60%",
-          setsReps: "3 × 5",
-          tempo: "3010",
-          rest: "2 min",
-        },
-      ];
-      html += renderMainLiftTable("Back Squat", squatRows);
+        function toggleWorkoutComplete(week, day) {
+            const key = `w${week}d${day}`;
+            completedWorkouts[key] = !completedWorkouts[key];
+            localStorage.setItem('completedWorkouts', JSON.stringify(completedWorkouts));
+            renderDaySelector();
+            renderContent();
+        }
 
-      html += `
-        <div class="card">
-          <div class="section-title">💥 Accessories – Unilateral + Posterior</div>
-      `;
+        function renderDaySelector() {
+            const container = document.getElementById('daySelector');
+            container.innerHTML = Object.keys(programData.days).map(day => {
+                const completed = isWorkoutCompleted(currentWeek, parseInt(day));
+                return `<button class="day-btn ${parseInt(day) === currentDay ? 'active' : ''} ${completed ? 'completed' : ''}" 
+                         onclick="selectDay(${day})">
+                    Day ${day}
+                </button>`;
+            }).join('');
+        }
 
-      if (currentWeek <= 2) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Suitcase Split Squat</div>
-            <div class="exercise-detail">3 sets • 6/leg • Tempo 20X1 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Single-Leg DB Cross Body RDL</div>
-            <div class="exercise-detail">3 sets • 6/leg • Tempo 3010 • Rest 60s</div>
-          </div>
-        `;
-      } else if (currentWeek <= 4) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Goblet Loaded Box Step Down</div>
-            <div class="exercise-detail">3 sets • 6/leg • Tempo 40X1 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Split Stance DB Romanian Deadlift</div>
-            <div class="exercise-detail">3 sets • 6/leg • Tempo 4111 • Rest 60s</div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">DB Suitcase Walking Lunge</div>
-            <div class="exercise-detail">3 sets • 12–16 steps • Tempo 20X0 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Death March</div>
-            <div class="exercise-detail">3 sets • 6–8/leg • Tempo 30X0 • Rest 60s</div>
-          </div>
-        `;
-      }
+        function selectWeek(weekNum) {
+            currentWeek = weekNum;
+            renderWeekIndicator();
+            renderContent();
+        }
 
-      html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Posterior Chain + Core</div>
-      `;
+        function selectDay(dayNum) {
+            currentDay = parseInt(dayNum);
+            renderDaySelector();
+            renderContent();
+        }
 
-      if (currentWeek <= 3) {
-        html += `
-            <div class="exercise-detail">DB Hip Thrust – 3 × 12–15 (Tempo 20X1, Rest 45s)</div>
-            <div class="exercise-detail">Plank March – 3 × 20 reps/arm (Rest 45s)</div>
-        `;
-      } else {
-        html += `
-            <div class="exercise-detail">Glute Bridge V Walkouts – 3 × 12–15 (Rest 45s)</div>
-            <div class="exercise-detail">RKC Plank – 3 × 45–60s (Rest 45s)</div>
-        `;
-      }
+        function getWeekRange(week) {
+            if (week <= 2) return '1-2';
+            if (week <= 4) return '3-4';
+            if (week === 5) return '5';
+            return '6';
+        }
 
-      html += `
-          </div>
-        </div>
-      `;
+        function getWeekRangeExtended(week) {
+            if (week <= 3) return '1-2-3';
+            return '4-5-6';
+        }
 
-      html += `
-        <div class="card">
-          <div class="section-title">🏃 Fast Short Run – Intervals</div>
-      `;
+        function renderContent() {
+            const container = document.getElementById('content');
+            const dayData = programData.days[currentDay];
+            const weekData = programData.weeks[currentWeek - 1];
 
-      if (currentWeek <= 2) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Intervals</div>
-            <div class="exercise-detail">
-              Warm-up: 10 min easy • Main: 6 × 400m at 3–5 km pace, 90s jog/walk recovery • Cool-down: 5–10 min easy
-            </div>
-          </div>
-        `;
-      } else if (currentWeek <= 4) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Intervals</div>
-            <div class="exercise-detail">
-              Warm-up: 10 min easy • Main: 8 × 300m at 3 km pace, 75s jog/walk recovery • Cool-down: 5–10 min easy
-            </div>
-          </div>
-        `;
-      } else if (currentWeek === 5) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Intervals</div>
-            <div class="exercise-detail">
-              Warm-up: 10 min easy • Main: 10 × 200m at mile pace, 60s jog/walk recovery • Cool-down: 5–10 min easy
-            </div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Light Intervals (Deload)</div>
-            <div class="exercise-detail">
-              Warm-up: 10 min easy • Main: 4 × 200m easy/moderate, 90s jog • Cool-down: 5–10 min easy
-            </div>
-          </div>
-        `;
-      }
+            if (dayData.isRest) {
+                container.innerHTML = `
+                    <div class="rest-day">
+                        <h2>🛌 ${dayData.name}</h2>
+                        <p style="color: var(--color-text-secondary); margin-top: 1rem;">
+                            ${dayData.description}
+                        </p>
+                    </div>
+                `;
+                return;
+            }
 
-      html += `</div>`;
+            let html = `<h1 style="margin-bottom: 1rem; color: var(--color-accent);">
+                Day ${currentDay}: ${dayData.name}
+            </h1>`;
 
-      area.innerHTML = html;
-    }
+            html += `<div class="tempo-note">
+                <strong>Week ${currentWeek} Focus:</strong> ${weekData.focus}<br>
+                <strong>Tempo Notation:</strong> 4 digits = eccentric-pause-concentric-pause<br>
+                Example: 3010 = 3sec down, 0 pause, 1sec up, 0 pause<br>
+                Example: 20X1 = 2sec down, 0 pause, explode up, 1sec pause
+            </div>`;
 
-    function renderDay2(area) {
-      let html = "";
+            dayData.sections.forEach(section => {
+                html += `<div class="workout-section">
+                    <h2>${section.title}</h2>`;
 
-      html += `
-        <div class="card">
-          <div class="section-title">
-            ⏱️ Session Info <span class="tag">~55–60 min</span>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Warm-up</div>
-            <div class="exercise-detail">
-              3 Rounds: Yoga Push Up × 8 • Prone Snow Angels × 10 • Scapular Pull Ups × 10
-            </div>
-          </div>
-        </div>
-      `;
+                if (section.isMainLift) {
+                    const liftName = section.title.includes('Squat') ? 'Back Squat' : 
+                                   section.title.includes('Bench') ? 'Bench Press' : 'Deadlift';
+                    html += `<table class="main-lift-table">
+                        <tr>
+                            <th>Load</th>
+                            <th>Sets × Reps</th>
+                            <th>Tempo</th>
+                            <th>Rest</th>
+                        </tr>
+                        <tr class="highlight">
+                            <td>${weekData.load}</td>
+                            <td>${weekData.sets}</td>
+                            <td>${weekData.tempo}</td>
+                            <td>${weekData.rest}</td>
+                        </tr>
+                    </table>`;
+                } else if (section.byWeek) {
+                    const weekRange = getWeekRange(currentWeek);
+                    const weekRangeExt = getWeekRangeExtended(currentWeek);
+                    
+                    let exercises = section.byWeek[weekRange] || 
+                                  section.byWeek[weekRangeExt] || 
+                                  section.byWeek['1-2-3'] || 
+                                  section.byWeek['4-5-6'] || 
+                                  section.byWeek['1-2'] || 
+                                  section.byWeek['5'] ||
+                                  section.byWeek['6'];
 
-      const benchRows = [
-        {
-          week: 1,
-          load: "75–78%",
-          setsReps: "4 × 6",
-          tempo: "3010",
-          rest: "2–3 min",
-        },
-        {
-          week: 2,
-          load: "78–82%",
-          setsReps: "5 × 5",
-          tempo: "3010",
-          rest: "2–3 min",
-        },
-        {
-          week: 3,
-          load: "82–85%",
-          setsReps: "4 × 4",
-          tempo: "3110",
-          rest: "3 min",
-        },
-        {
-          week: 4,
-          load: "85–88%",
-          setsReps: "4 × 3",
-          tempo: "3110",
-          rest: "3–4 min",
-        },
-        {
-          week: 5,
-          load: "88–92%",
-          setsReps: "5 × 2",
-          tempo: "31X0",
-          rest: "4–5 min",
-        },
-        {
-          week: 6,
-          load: "50–60%",
-          setsReps: "3 × 5",
-          tempo: "3010",
-          rest: "2 min",
-        },
-      ];
-      html += renderMainLiftTable("Bench Press", benchRows);
+                    if (exercises) {
+                        exercises.forEach(ex => {
+                            html += `<div class="exercise-item">
+                                <div class="exercise-header">${ex.name}</div>
+                                <div class="exercise-details">${ex.details.replace(/\n/g, '<br>')}</div>
+                            </div>`;
+                        });
+                    }
+                } else if (section.exercises) {
+                    section.exercises.forEach(ex => {
+                        html += `<div class="exercise-item">
+                            <div class="exercise-header">${ex.name}</div>
+                            <div class="exercise-details">${ex.details.replace(/\n/g, '<br>')}</div>
+                        </div>`;
+                    });
+                }
 
-      html += `
-        <div class="card">
-          <div class="section-title">💥 Accessories – Upper Push + Pull</div>
-      `;
+                html += `</div>`;
+            });
 
-      if (currentWeek <= 2) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Glute Bridge Alternating DB Bench Press</div>
-            <div class="exercise-detail">3 × 10–12 • Tempo 2020 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Single Arm DB Push Press (eccentric focus)</div>
-            <div class="exercise-detail">3 × 6–8/arm • 4s lower • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Parallette Plank Supported DB Row</div>
-            <div class="exercise-detail">3 × 6–8/arm • Tempo 20X1 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Pronated Strict Pull Up</div>
-            <div class="exercise-detail">3 × 8–10 • Tempo 2011 • Rest 60s</div>
-          </div>
-        `;
-      } else if (currentWeek <= 4) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Incline DB Bench Press</div>
-            <div class="exercise-detail">3 × 8–10 • Tempo 31X0 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Half Kneeling DB Arnold Press</div>
-            <div class="exercise-detail">3 × 6–8/arm • Tempo 21X1 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">DB Tripod Row</div>
-            <div class="exercise-detail">3 × 6–8/arm • Tempo 30X1 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Mixed Grip Pull Up 2.2.2.2</div>
-            <div class="exercise-detail">3 waves of 2 reps, switch grip every 2 reps • Rest 60s</div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Single Arm DB Bench Press</div>
-            <div class="exercise-detail">3 × 5–7/arm • Tempo 22X0 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Tall Kneeling Alternating DB Press</div>
-            <div class="exercise-detail">3 × 8–10/arm • Tempo 2111 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Chainsaw Row</div>
-            <div class="exercise-detail">3 × 8–10/arm • Tempo 20X2 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Wide Grip Strict Pull Up</div>
-            <div class="exercise-detail">3 × 4–6 • Tempo 31X2 • Rest 60s</div>
-          </div>
-        `;
-      }
+            container.innerHTML = html;
+            
+            const completed = isWorkoutCompleted(currentWeek, currentDay);
+            if (!dayData.isRest) {
+                html = `<button class="complete-workout-btn ${completed ? 'completed' : ''}" 
+                                onclick="toggleWorkoutComplete(${currentWeek}, ${currentDay})">
+                            ${completed ? '✓ Workout Completed' : 'Mark as Complete'}
+                        </button>`;
+                container.innerHTML += html;
+            }
+        }
 
-      html += `
-        </div>
-        <div class="card">
-          <div class="section-title">🎯 Arms + Shoulders Isolation</div>
-      `;
-
-      if (currentWeek <= 3) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Top Down Alternating DB Curls</div>
-            <div class="exercise-detail">3 × 6–8/arm • Tempo 30X0 • Rest 45s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Narrow Grip Tricep Push Ups</div>
-            <div class="exercise-detail">3 × 8–10 • Tempo 3011 • Rest 45s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Single Arm Trap 3 Raise with DB</div>
-            <div class="exercise-detail">3 × 10/arm • Slow tempo • Rest 60s</div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Hammer Curls</div>
-            <div class="exercise-detail">3 × 8–10 • Tempo 40X1 • Rest 45s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">DB Skull Crushers</div>
-            <div class="exercise-detail">3 × 8–10 • Tempo 3010 • Rest 45s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Bent Over DB Reverse Fly</div>
-            <div class="exercise-detail">3 × 12 • Tempo 20X1 • Rest 60s</div>
-          </div>
-        `;
-      }
-
-      html += `</div>`;
-      area.innerHTML = html;
-    }
-
-    function renderDay3(area) {
-      let html = "";
-
-      html += `
-        <div class="card">
-          <div class="section-title">
-            ⏱️ Session Info <span class="tag">~55–65 min</span>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Warm-up</div>
-            <div class="exercise-detail">
-              EMOM 9 min: 1) Run 30–40s • 2) Dual DB Cuban Press × 6–8 (2020) • 3) Goblet Cossack Squat × 4/side (2111)
-            </div>
-          </div>
-        </div>
-      `;
-
-      html += `
-        <div class="card">
-          <div class="section-title">🏋️ Olympic Lifting – Clean & Jerk</div>
-      `;
-
-      if (currentWeek <= 2) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">EMOM × 15 min</div>
-            <div class="exercise-detail">
-              Every 3 min: 1 Power Clean + 1 Front Squat + 1 Push Jerk × 3 complexes @ 60–65% 1RM Clean
-            </div>
-          </div>
-        `;
-      } else if (currentWeek <= 4) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">EMOM × 18 min</div>
-            <div class="exercise-detail">
-              Every 3 min: 1 Hang Power Clean + 1 Front Squat + 1 Split Jerk × 3 complexes @ 65–70% 1RM Clean
-            </div>
-          </div>
-        `;
-      } else if (currentWeek === 5) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">EMOM × 18 min</div>
-            <div class="exercise-detail">
-              Every 3 min: 1 Clean (from floor) + 1 Front Squat + 1 Split Jerk × 2 complexes @ 70–75% 1RM Clean
-            </div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">EMOM × 12 min (Deload)</div>
-            <div class="exercise-detail">
-              Every 3 min: 1 Power Clean + 1 Push Press × 4 complexes @ 50–60% 1RM Clean
-            </div>
-          </div>
-        `;
-      }
-
-      html += `</div>`;
-
-      html += `
-        <div class="card">
-          <div class="section-title">🤸 Gymnastics Skill (10 min)</div>
-      `;
-
-      if (currentWeek <= 2) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">EMOM × 10 min</div>
-            <div class="exercise-detail">
-              1) 3–5 Strict Toes-to-Bar • 2) 3–5 Ring Rows (31X1) • 3) 30s Handstand Hold (wall) •
-              4) 3–5 Bench Dips • 5) 2–3 Strict HSPU or 4s negatives
-            </div>
-          </div>
-        `;
-      } else if (currentWeek <= 4) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">EMOM × 10 min</div>
-            <div class="exercise-detail">
-              1) 5–7 Strict Toes-to-Bar • 2) 3–5 Chest-to-Ring Rows (31X1) • 3) 30s freestanding HS attempts •
-              4) 3–5 Ring Dips • 5) 3–5 Strict HSPU
-            </div>
-          </div>
-        `;
-      } else if (currentWeek === 5) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">AMRAP 10 min (quality)</div>
-            <div class="exercise-detail">
-              3 Strict Toes-to-Bar • 3 Strict Chest-to-Bar Pull Ups • 20s Handstand Hold •
-              3 Ring Dips • 2 Strict HSPU
-            </div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">EMOM × 10 min (Deload)</div>
-            <div class="exercise-detail">
-              1) 3 Kipping Toes-to-Bar • 2) 5 Ring Rows • 3) 30s Hollow Hold •
-              4) 5 Push Ups • 5) 30s Plank
-            </div>
-          </div>
-        `;
-      }
-
-      html += `
-        </div>
-        <div class="card">
-          <div class="section-title">🏃 Easy Run – Zone 2</div>
-          <div class="exercise-block">
-            <div class="exercise-name">Zone 2 Run</div>
-            <div class="exercise-detail">
-              ${
-                currentWeek === 6
-                  ? "20–30 min easy, conversational pace (Z2)"
-                  : "30–45 min continuous, Z2 (60–70% HRmax, nose-breathing pace)"
-              }
-            </div>
-          </div>
-        </div>
-      `;
-
-      area.innerHTML = html;
-    }
-
-    function renderDay4(area) {
-      let html = "";
-
-      html += `
-        <div class="card">
-          <div class="section-title">
-            ⏱️ Session Info <span class="tag">~55–60 min</span>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Warm-up</div>
-            <div class="exercise-detail">
-              3 Rounds: Goblet Good Morning (3030) × 5 • Quadruped Hip Extensions × 10/leg • Scapular Push Ups × 10
-            </div>
-          </div>
-        </div>
-      `;
-
-      const dlRows = [
-        {
-          week: 1,
-          load: "75–78%",
-          setsReps: "4 × 6",
-          tempo: "3110",
-          rest: "2–3 min",
-        },
-        {
-          week: 2,
-          load: "78–82%",
-          setsReps: "5 × 5",
-          tempo: "3110",
-          rest: "2–3 min",
-        },
-        {
-          week: 3,
-          load: "82–85%",
-          setsReps: "4 × 4",
-          tempo: "31X0",
-          rest: "3 min",
-        },
-        {
-          week: 4,
-          load: "85–88%",
-          setsReps: "4 × 3",
-          tempo: "31X0",
-          rest: "3–4 min",
-        },
-        {
-          week: 5,
-          load: "88–92%",
-          setsReps: "5 × 2",
-          tempo: "31X0",
-          rest: "4–5 min",
-        },
-        {
-          week: 6,
-          load: "50–60%",
-          setsReps: "3 × 5",
-          tempo: "3110",
-          rest: "2 min",
-        },
-      ];
-      html += renderMainLiftTable("Deadlift", dlRows);
-
-      html += `
-        <div class="card">
-          <div class="section-title">💥 Accessories – Hinge + Glutes + Back</div>
-      `;
-
-      if (currentWeek <= 2) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">DB Romanian Deadlift</div>
-            <div class="exercise-detail">3 × 8–10 • Tempo 3131 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">B-Stance DB Hip Thrust</div>
-            <div class="exercise-detail">3 × 8–10/leg • Tempo 3110 • Rest 60s</div>
-          </div>
-        `;
-      } else if (currentWeek <= 4) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Single Leg DB Romanian Deadlift</div>
-            <div class="exercise-detail">3 × 6–8/leg • Tempo 31X1 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Feet Elevated DB Glute Bridge</div>
-            <div class="exercise-detail">3 × 20 • Tempo 10X0 • Rest 60s</div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Deficit Deadlift (2″)</div>
-            <div class="exercise-detail">3 × 5–6 • Tempo 3010 • Rest 60s</div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Glute Loop DB Hip Thrust</div>
-            <div class="exercise-detail">3 × 10–12 • Tempo 20X2 • Rest 60s</div>
-          </div>
-        `;
-      }
-
-      if (currentWeek <= 2) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Back + Core</div>
-            <div class="exercise-detail">
-              Dual DB Prone Row – 3 × 8–10 (11X2) • Weighted Back Extensions – 3 × 12–15 (3010) • Hamstring Plank – 3 × 30s
-            </div>
-          </div>
-        `;
-      } else if (currentWeek <= 4) {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Back + Core</div>
-            <div class="exercise-detail">
-              DB Bent Over Row – 3 × 10–12 (30X1) • Weighted Back Extensions – 3 × 10–12 (3110) • Extended Reverse Plank – 3 × 30–45s
-            </div>
-          </div>
-        `;
-      } else {
-        html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Back + Core</div>
-            <div class="exercise-detail">
-              DB Gorilla Rows – 3 × 12 alternating (20X1) • Heavy Back Extensions – 3 × 8–10 (3010) • Hollow Body Hold – 3 × 30–45s
-            </div>
-          </div>
-        `;
-      }
-
-      html += `
-        </div>
-        <div class="card">
-          <div class="section-title">🚶 Carries – Grip + Core</div>
-          <div class="exercise-block">
-            <div class="exercise-name">Farmer's Walk & Overhead Carry</div>
-            <div class="exercise-detail">
-              2–3 rounds: Farmer's Walk 40m heavy • Single Arm DB Overhead Carry 20m/arm
-            </div>
-          </div>
-        </div>
-      `;
-
-      area.innerHTML = html;
-    }
-
-    function renderDay5(area) {
-      let html = "";
-
-      html += `
-        <div class="card">
-          <div class="section-title">
-            ⏱️ Long Run <span class="tag">${
-              currentWeek <= 2
-                ? "60 min"
-                : currentWeek <= 4
-                ? "75 min"
-                : currentWeek === 5
-                ? "80–90 min"
-                : "40–45 min (Deload)"
-            }</span>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Warm-up</div>
-            <div class="exercise-detail">
-              10 min easy jog + dynamic stretches (leg swings, walking lunges, hip circles)
-            </div>
-          </div>
-      `;
-
-      let main;
-      if (currentWeek <= 2) {
-        main =
-          "60 min steady run • Intensity: High Zone 3 (75–80% HRmax) • 'Comfortably hard' but sustainable, even pacing.";
-      } else if (currentWeek <= 4) {
-        main =
-          "75 min steady run • Intensity: High Zone 3 to low Zone 4 (78–82% HRmax) • Slightly harder than weeks 1–2, still even pacing.";
-      } else if (currentWeek === 5) {
-        main =
-          "80–90 min steady run • Intensity: Low–mid Zone 4 (80–85% HRmax) • Peak long run, last 15 min should feel challenging but controlled.";
-      } else {
-        main =
-          "40–45 min easy run • Intensity: Zone 2 (60–70% HRmax) • Recovery-focused, conversational pace only.";
-      }
-
-      html += `
-          <div class="exercise-block">
-            <div class="exercise-name">Main Run</div>
-            <div class="exercise-detail">
-              ${main}
-            </div>
-          </div>
-          <div class="exercise-block">
-            <div class="exercise-name">Cool-down</div>
-            <div class="exercise-detail">
-              5–10 min easy jog or walk + static stretching (hip flexors, quads, hamstrings, calves)
-            </div>
-          </div>
-        </div>
-      `;
-
-      area.innerHTML = html;
-    }
-
-    init();
-  </script>
+        // Immediate initialization
+        init();
+        
+        // Backup initialization on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            const weekSelector = document.getElementById('weekSelector');
+            if (!weekSelector || !weekSelector.innerHTML) {
+                console.log('Initializing on DOMContentLoaded');
+                init();
+            }
+        });
+        
+        // Final backup on window load
+        window.addEventListener('load', function() {
+            console.log('Window loaded');
+            const weekSelector = document.getElementById('weekSelector');
+            if (!weekSelector || !weekSelector.innerHTML) {
+                console.log('Initializing on window load');
+                init();
+            }
+        });
+        
+        // iOS Safari specific fix - pageshow event
+        window.addEventListener('pageshow', function(event) {
+            console.log('Page show event');
+            const weekSelector = document.getElementById('weekSelector');
+            if (!weekSelector || !weekSelector.innerHTML) {
+                console.log('Initializing on pageshow');
+                init();
+            }
+        });
+    </script>
 </body>
 </html>
