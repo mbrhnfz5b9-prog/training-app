@@ -438,6 +438,8 @@
 
     <script>
         console.log('Script loading...');
+        console.log('Current URL:', window.location.href);
+        console.log('Document ready state:', document.readyState);
         
         const programData = {
             weeks: [
@@ -722,12 +724,25 @@
         let completedWorkouts = JSON.parse(localStorage.getItem('completedWorkouts') || '{}');
 
         function init() {
-            renderWeekIndicator();
-            renderDaySelector();
-            renderContent();
-            initSwipeGestures();
-            initProgramUpload();
-            loadCompletedWorkouts();
+            console.log('Initializing app...');
+            try {
+                renderWeekIndicator();
+                renderDaySelector();
+                renderContent();
+                initSwipeGestures();
+                initProgramUpload();
+                loadCompletedWorkouts();
+                console.log('App initialized successfully');
+            } catch (error) {
+                console.error('Error during initialization:', error);
+                document.getElementById('content').innerHTML = `
+                    <div style="padding: 2rem; text-align: center;">
+                        <h2 style="color: #C41E3A;">Initialization Error</h2>
+                        <p>Error: ${error.message}</p>
+                        <button onclick="location.reload()" style="padding: 0.5rem 1rem; margin-top: 1rem; background: #C41E3A; color: white; border: none; border-radius: 8px; cursor: pointer;">Reload Page</button>
+                    </div>
+                `;
+            }
         }
 
         function renderWeekIndicator() {
@@ -795,7 +810,13 @@
         }
 
         function loadCompletedWorkouts() {
-            completedWorkouts = JSON.parse(localStorage.getItem('completedWorkouts') || '{}');
+            try {
+                completedWorkouts = JSON.parse(localStorage.getItem('completedWorkouts') || '{}');
+                console.log('Loaded completed workouts:', completedWorkouts);
+            } catch (error) {
+                console.error('Error loading completed workouts:', error);
+                completedWorkouts = {};
+            }
         }
 
         function isWorkoutCompleted(week, day) {
@@ -803,11 +824,17 @@
         }
 
         function toggleWorkoutComplete(week, day) {
-            const key = `w${week}d${day}`;
-            completedWorkouts[key] = !completedWorkouts[key];
-            localStorage.setItem('completedWorkouts', JSON.stringify(completedWorkouts));
-            renderDaySelector();
-            renderContent();
+            try {
+                const key = `w${week}d${day}`;
+                completedWorkouts[key] = !completedWorkouts[key];
+                localStorage.setItem('completedWorkouts', JSON.stringify(completedWorkouts));
+                console.log('Toggled workout completion:', key, completedWorkouts[key]);
+                renderDaySelector();
+                renderContent();
+            } catch (error) {
+                console.error('Error toggling workout completion:', error);
+                alert('Error saving workout status. Please try again.');
+            }
         }
 
         function getDayIcon(dayNum) {
@@ -954,40 +981,55 @@
             }
         }
 
-        // Immediate initialization
-        init();
-        
-        // Backup initialization on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded');
+        // Enhanced initialization for GitHub Pages compatibility
+        function safeInit() {
+            console.log('SafeInit called, readyState:', document.readyState);
             const weekSelector = document.getElementById('weekSelector');
-            if (!weekSelector || !weekSelector.innerHTML) {
-                console.log('Initializing on DOMContentLoaded');
-                init();
+            const daySelector = document.getElementById('daySelector');
+            const content = document.getElementById('content');
+            
+            if (weekSelector && daySelector && content) {
+                if (!weekSelector.innerHTML || weekSelector.innerHTML.trim() === '') {
+                    console.log('Elements found but empty, initializing...');
+                    init();
+                } else {
+                    console.log('App already initialized');
+                }
+            } else {
+                console.error('Required elements not found:', {
+                    weekSelector: !!weekSelector,
+                    daySelector: !!daySelector,
+                    content: !!content
+                });
             }
-        });
+        }
         
-        // Final backup on window load
+        // Try immediate initialization if DOM is already ready
+        if (document.readyState === 'loading') {
+            console.log('Document still loading, waiting...');
+            document.addEventListener('DOMContentLoaded', safeInit);
+        } else {
+            console.log('Document already loaded, initializing immediately');
+            safeInit();
+        }
+        
+        // Backup initialization on window load
         window.addEventListener('load', function() {
-            console.log('Window loaded');
-            const weekSelector = document.getElementById('weekSelector');
-            if (!weekSelector || !weekSelector.innerHTML) {
-                console.log('Initializing on window load');
-                init();
-            }
+            console.log('Window load event fired');
+            safeInit();
         });
         
         // iOS Safari specific fix - pageshow event
         window.addEventListener('pageshow', function(event) {
-            console.log('Page show event');
-            const weekSelector = document.getElementById('weekSelector');
-            if (!weekSelector || !weekSelector.innerHTML) {
-                console.log('Initializing on pageshow');
-                init();
-            }
+            console.log('Pageshow event fired, persisted:', event.persisted);
+            safeInit();
         });
+        
+        // Additional fallback for slow connections
+        setTimeout(function() {
+            console.log('Timeout fallback check');
+            safeInit();
+        }, 1000);
     </script>
 </body>
 </html>
-
-
